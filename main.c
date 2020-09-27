@@ -9,6 +9,29 @@
 #include <stdbool.h>
 #include <unistd.h>
 
+void sendUDP(char * addr, char * msg){
+    if (!sock){
+        if ( (sock = socket(AF_INET, SOCK_DGRAM, 0)) < 0 ) { 
+            puts("socket creation failed"); 
+            exit(EXIT_FAILURE); 
+        }
+    }
+
+    struct sockaddr_in dstAddr;
+    memset(&dstAddr, 0, sizeof(dstAddr));
+    
+    dstAddr.sin_family = AF_INET; 
+    dstAddr.sin_port = htons(UDP_PORT); 
+    dstAddr.sin_addr.s_addr = inet_addr(addr);
+
+    if (sendto(sock, msg, strlen(msg)+1, 0, // +1 to include terminator
+           (const struct sockaddr *)&dstAddr, sizeof(dstAddr)) < 0){
+        puts("cannot send message");
+        close(sock);
+        exit(EXIT_FAILURE); 
+    }
+}
+
 char* getTime(){
     const int TIME_BUFF_SIZE = 64;
     time_t t = time(NULL);
