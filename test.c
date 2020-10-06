@@ -18,7 +18,7 @@ int main(int argc, char *argv[]){
     if (strcmp(argv[1], "READ") == 0){
         char buff[100] = {0};
         int count = read(fd, buff, 100);
-        puts("read!\n");
+        printf("read! %d\n",count);
         // fprintf("read %d bytes from %s: %s\n",count, argv[2], buff);
     }
     close(fd);
